@@ -62,6 +62,8 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+// Number and letter representations for the 7 segment display
 uint8_t Nums[11] = {
 		0b11111100, // 0
 		0b01100000, // 1
@@ -104,6 +106,8 @@ uint8_t Chars[27] = {
 		0b00000000, //
 		0b00000000	// Empty character ( { )
 	};
+
+// Variables
 uint8_t selectorMode = 0;
 uint16_t counterNum = 0;
 //uint8_t volume = 10;
@@ -117,6 +121,8 @@ bool alarmChecked = false;
 uint8_t currentTime[5] = {1, 2, 0, 0, 0};
 uint8_t maxTime[4] = {1, 2, 5, 9};
 uint8_t alarmTime[5] = {0, 0, 0, 0, 0};
+
+// Updates the clock based on the current time value
 void updateTime(){
 	currentTime[3] += 1;
 	for(int i = 3; i >= 0; i--){
@@ -141,6 +147,8 @@ void updateTime(){
 	}
 	alarmChecked = false;
 };
+
+// Used to input bits into the shift register
 void shiftBit(bool bit){
 	/*This is the reverse since I did the entire codebase thinking that my
 	display was a common cathode when it wasn't, so changing this one thing
@@ -153,6 +161,8 @@ void shiftBit(bool bit){
 	HAL_GPIO_WritePin(SRCLK_GPIO_Port, SRCLK_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(SRCLK_GPIO_Port, SRCLK_Pin, GPIO_PIN_RESET);
 };
+
+// Modifies value in shift register and displayes it
 void displayByte(uint8_t digit, bool activateDot = false){
 	if(activateDot == true){
 		digit |= 0b00000001;
@@ -165,12 +175,18 @@ void displayByte(uint8_t digit, bool activateDot = false){
 	HAL_GPIO_WritePin(RCLK_GPIO_Port, RCLK_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(RCLK_GPIO_Port, RCLK_Pin, GPIO_PIN_RESET);
 };
+
+// A function to intuitively display a number
 void displayNum(unsigned int num, bool isMiddle = false){
 	displayByte(Nums[num], isMiddle);
 };
+
+// A function to intuitively display a character
 void displayChar(char letter, bool isMiddle = false){
 	displayByte(Chars[letter - 97], isMiddle);
 };
+
+// Used to display 4 digits
 void activateDisplay(int Digit1, int Digit2, int Digit3, int Digit4, uint8_t AMPM = 0){
 	if(Digit1 != 10){
 displayNum(Digit1);
@@ -191,6 +207,8 @@ HAL_GPIO_WritePin(D4_GPIO_Port, D4_Pin, GPIO_PIN_SET);
 	HAL_Delay(1);
 	HAL_GPIO_WritePin(D4_GPIO_Port, D4_Pin, GPIO_PIN_RESET);
 };
+
+// Used to display 4 characters
 void activateDisplay(char C1 = '[', char C2 = '[', char C3 = '[', char C4 = '['){
 	displayChar(C1);
 	HAL_GPIO_WritePin(D1_GPIO_Port, D1_Pin, GPIO_PIN_SET);
@@ -210,6 +228,8 @@ HAL_GPIO_WritePin(D3_GPIO_Port, D3_Pin, GPIO_PIN_RESET);
 	HAL_Delay(1);
 HAL_GPIO_WritePin(D4_GPIO_Port, D4_Pin, GPIO_PIN_RESET);
 };
+
+// Used to display 3 characters and 1 digit
 void activateDisplay(char C1 = '[', char C2 = '[', char C3 = '[', int Digit4 = 10){
 	displayChar(C1);
 	HAL_GPIO_WritePin(D1_GPIO_Port, D1_Pin, GPIO_PIN_SET);
@@ -228,6 +248,8 @@ void activateDisplay(char C1 = '[', char C2 = '[', char C3 = '[', int Digit4 = 1
 	HAL_Delay(1);
 	HAL_GPIO_WritePin(D4_GPIO_Port, D4_Pin, GPIO_PIN_RESET);
 };
+
+// Used to display 2 digits and 2 characters
 void activateDisplay(int Digit1, int Digit2, char C3 = '[', char C4 = '['){
 	if(Digit1 != 10){
 		displayNum(Digit1);
@@ -248,6 +270,8 @@ void activateDisplay(int Digit1, int Digit2, char C3 = '[', char C4 = '['){
 	HAL_Delay(1);
 	HAL_GPIO_WritePin(D4_GPIO_Port, D4_Pin, GPIO_PIN_RESET);
 };
+
+// For the user to change either the current time value or alarm value
 void changeTimeOrAlarm(uint8_t *arr){
 	uint8_t newTime[4] = {8, 8, 8, 8};
 	for(int i = 0; i < 4; i++){
@@ -305,6 +329,8 @@ void changeTimeOrAlarm(uint8_t *arr){
 		arr[i] = newTime[i];
 	}
 };
+
+// Handling the interrupt from the clock counting a minute
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 /* Prevent unused argument(s) compilation warning */
@@ -362,7 +388,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  // Displays the time
 	  activateDisplay(currentTime[0], currentTime[1], currentTime[2], currentTime[3], currentTime[4]);
+
+	  	// Handles the user selecting to change a setting
 	  	  if(selectorMode > 0){
 	  		if(alarmSounding == true){
 	  			alarmSounding = false;
@@ -450,6 +479,8 @@ int main(void)
 	  		  }
 	  		 }
 	  	  }
+
+	  	// Checks to see whether the alarm need to be activated or the LEDs brightened
 	  	  if(alarmSet == true && alarmChecked == false){
 	  		if(militaryTime == true){
 	  			if( alarmTime[3] == currentTime[3] &&
