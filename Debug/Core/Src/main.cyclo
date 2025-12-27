@@ -1,0 +1,20 @@
+../Core/Src/main.cpp:117:6:void updateTime()	8
+../Core/Src/main.cpp:141:6:void shiftBit(bool)	2
+../Core/Src/main.cpp:155:6:void displayByte(uint8_t, bool)	3
+../Core/Src/main.cpp:167:6:void displayNum(unsigned int, bool)	1
+../Core/Src/main.cpp:170:6:void displayChar(char, bool)	1
+../Core/Src/main.cpp:173:6:void activateDisplay(int, int, int, int, uint8_t)	2
+../Core/Src/main.cpp:193:6:void activateDisplay(char, char, char, char)	2
+../Core/Src/main.cpp:212:6:void activateDisplay(char, char, char, int)	1
+../Core/Src/main.cpp:230:6:void activateDisplay(int, int, char, char)	2
+../Core/Src/main.cpp:250:6:void changeTimeOrAlarm(uint8_t*)	17
+../Core/Src/main.cpp:307:6:void HAL_GPIO_EXTI_Callback(uint16_t)	5
+../Core/Src/main.cpp:328:5:int main()	46
+../Core/Src/main.cpp:504:6:void SystemClock_Config()	3
+../Core/Src/main.cpp:552:13:void MX_RTC_Init()	5
+../Core/Src/main.cpp:634:13:void MX_TIM2_Init()	4
+../Core/Src/main.cpp:683:13:void MX_GPIO_Init()	1
+../Core/Src/main.cpp:742:6:void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef*)	3
+../Core/Src/main.cpp:759:6:void Error_Handler()	1
+../Core/Src/main.cpp:768:1:void __static_initialization_and_destruction_0()	1
+../Core/Src/main.cpp:768:1:cpp)	1
